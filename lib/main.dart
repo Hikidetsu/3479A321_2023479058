@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:lab2/pages/my_home_page.dart';
 import 'package:logger/logger.dart';
+import 'package:lab2/pages/list_art.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,7 +50,6 @@ class _MyAppState extends State<MyApp> {
         title: '2023479058',
         onChangeColor: _selectColor,
         newColor: _newColor,
-        
       ),
     );
   }

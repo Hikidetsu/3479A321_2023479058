@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:lab2/pages/list_art.dart';
+import 'package:lab2/pages/list_creation.dart';
+import 'package:lab2/pages/about.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -16,6 +18,7 @@ class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
+
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
@@ -35,6 +38,28 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _counter = 0;
     });
+  }
+
+  void _goToCreation() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ListCreation()),
+    );
+  }
+
+  void _goToAbout() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => About()),
+    );
+  }
+
+  void _goToArt(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ListArtScreen()),
+    );
+
   }
 
   List<Widget> _buildFooterButtons() {
@@ -61,43 +86,67 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            
+            icon: const Icon(Icons.message, color: Colors.yellow, size: 50),
+            onPressed: _goToAbout,
+          ),
+        ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('Pixel Art sobre una grilla personalizable'),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Image.asset('assets/Pixel-Art-Hot-Pepper-2-1.webp', width: 400, height: 400, fit:BoxFit.cover),
-                  Image.asset('assets/Pixel-Art-Pizza-2.webp', width: 400, height: 400, fit:BoxFit.cover),
-                  Image.asset('assets/Pixel-Art-Watermelon-3.webp',width: 400, height: 400, fit:BoxFit.cover),
-                ],  
+      body: Stack(
+        children: [
+          Center(
+            child: Card(
+              elevation: 9,
+              color: Colors.blue,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row( /*
+                      children: [
+                        Image.asset('assets/Pixel-Art-Hot-Pepper-2-1.webp',
+                            width: 200, height: 200, fit: BoxFit.cover),
+                        const SizedBox(width: 12),
+                        Image.asset('assets/Pixel-Art-Pizza-2.webp',
+                            width: 200, height: 200, fit: BoxFit.cover),
+                        const SizedBox(width: 12),
+                        Image.asset('assets/Pixel-Art-Watermelon-3.webp',
+                            width: 200, height: 200, fit: BoxFit.cover),
+                      ],*/
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: _goToCreation,
+                        icon: const Icon(Icons.add),
+                        label: const Text("Crear"),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: null,
+                        icon: const Icon(Icons.share),
+                        label: const Text("Compartir"),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.art_track),
+          ),
+        ],
       ),
       persistentFooterButtons: _buildFooterButtons(),
     );
   }
 }
-

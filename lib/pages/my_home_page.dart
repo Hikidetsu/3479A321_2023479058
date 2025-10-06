@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lab2/pages/list_art.dart';
 import 'package:lab2/pages/list_creation.dart';
 import 'package:lab2/pages/about.dart';
+import 'package:lab2/pages/pixel_art_screen.dart';
 
 //a
 
@@ -61,7 +62,15 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       MaterialPageRoute(builder: (context) => ListArtScreen()),
     );
+  }
 
+  void _pixelArtscreen(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PixelArtScreen(title: "pixel art screen "),
+      ),
+    );
   }
 
   List<Widget> _buildFooterButtons() {
@@ -77,6 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ElevatedButton(
         onPressed: _resetCounter,
         child: const Icon(Icons.refresh),
+      ),
+      ElevatedButton(
+        onPressed: _pixelArtscreen,
+        child: const Icon(Icons.grid_view_sharp),
       ),
       ElevatedButton(
         onPressed: widget.onChangeColor,

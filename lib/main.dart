@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:lab2/pages/my_home_page.dart';
 import 'package:logger/logger.dart';
 import 'package:lab2/pages/list_art.dart';
+import 'package:provider/provider.dart';
+import 'package:lab2/providers/configurationData.dart';
+import 'package:lab2/pages/pixel_art_screen.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AppData(), 
+      child: const MyApp(),
+    ),
+  );
 }
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 

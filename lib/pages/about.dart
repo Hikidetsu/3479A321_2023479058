@@ -14,7 +14,7 @@ class About extends StatelessWidget {
         children: [
           Text('Informacion del desarrollador del proyecto:',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+          ), 
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed:  () {

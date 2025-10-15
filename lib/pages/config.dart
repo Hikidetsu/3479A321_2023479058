@@ -40,9 +40,12 @@ class Config extends StatelessWidget {
                         child: Text(size.toString()),
                       ))
                   .toList(),
-              onChanged: (value) {
+              onChanged: (value) async{
                 if (value != null) {
-                  context.read<AppData>().setSize(value);
+                  await context.read<AppData>().setSize(value);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('el Tamaño se ha guardado correctamente')),
+                  );
                 }
               },
               decoration: const InputDecoration(
@@ -58,22 +61,27 @@ class Config extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<Color>(
-              value: appData.selectedColor,
-              items: colorOptions.entries
-                  .map((entry) => DropdownMenuItem(
-                        value: entry.value,
-                        child: Text(entry.key),
-                      ))
-                  .toList(),
-              onChanged: (color) {
-                if (color != null) {
-                  context.read<AppData>().setColor(color);
-                }
-              },
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-              ),
+            value: colorOptions.values.contains(appData.selectedColor)
+                ? appData.selectedColor
+                : colorOptions.values.first, 
+            items: colorOptions.entries
+                .map((entry) => DropdownMenuItem(
+                      value: entry.value,
+                      child: Text(entry.key),
+                    ))
+                .toList(),
+            onChanged: (color) async {
+              if (color != null) {
+                await context.read<AppData>().setColor(color);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('el Color se ha guardado correctamente')),
+                );
+              }
+            },
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
             ),
+          ),
           ],
         ),
       ),

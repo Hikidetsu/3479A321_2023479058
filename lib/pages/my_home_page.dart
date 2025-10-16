@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _goToCreation() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ListCreation()),
+      MaterialPageRoute(builder: (context) => PixelArtScreen(title: 'Create pixel art',)),
     );
   }
 
@@ -86,10 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ElevatedButton(
         onPressed: _resetCounter,
         child: const Icon(Icons.refresh),
-      ),
-      ElevatedButton(
-        onPressed: _pixelArtscreen,
-        child: const Icon(Icons.grid_view_sharp),
       ),
       ElevatedButton(
         onPressed: widget.onChangeColor,

@@ -4,7 +4,7 @@ import 'package:lab2/pages/list_creation.dart';
 import 'package:lab2/pages/about.dart';
 import 'package:lab2/pages/pixel_art_screen.dart';
 
-//a
+//aa
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({

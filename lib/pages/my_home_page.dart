@@ -3,8 +3,39 @@ import 'package:lab2/pages/list_art.dart';
 import 'package:lab2/pages/list_creation.dart';
 import 'package:lab2/pages/about.dart';
 import 'package:lab2/pages/pixel_art_screen.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
-//aa
+class ImageDetailScreen extends StatelessWidget {
+  final File imageFile;
+  final String title;
+
+  const ImageDetailScreen({
+    super.key,
+    required this.imageFile,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+      ),
+      backgroundColor: Colors.white,
+      body: Center(
+        child: InteractiveViewer(
+          panEnabled: true,
+          minScale: 1.0,
+          maxScale: 4.0,
+          child: Image.file(imageFile, fit: BoxFit.contain),
+        ),
+      ),
+    );
+  }
+}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -46,7 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _goToCreation() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ListCreation()),
+      MaterialPageRoute(
+        builder: (context) => const PixelArtScreen(title: 'Pixel Art Screen'),
+      ),
     );
   }
 
@@ -57,18 +90,47 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _goToArt(){
+  void _goToArt() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ListArtScreen()),
+      MaterialPageRoute(builder: (context) => const ListCreation()),
     );
   }
 
-  void _pixelArtscreen(){
+  Future<File?> getLatestCreation() async {
+    try {
+      final provider = ListArt();
+      await provider.loadCreations();
+
+      if (provider.imagenes.isEmpty) {
+        return null;
+      }
+      return provider.imagenes.last;
+    } catch (e) {
+      print("Error al obtener la última creación: $e");
+      return null;
+    }
+  }
+
+  Future<void> _openLatestCreation() async {
+    final latestFile = await getLatestCreation();
+
+    if (latestFile == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No hay creaciones guardadas.")),
+      );
+      return;
+    }
+
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PixelArtScreen(title: "pixel art screen "),
+        builder: (context) => ImageDetailScreen(
+          imageFile: latestFile,
+          title: "Última creación",
+        ),
       ),
     );
   }
@@ -88,10 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.refresh),
       ),
       ElevatedButton(
-        onPressed: _pixelArtscreen,
-        child: const Icon(Icons.grid_view_sharp),
-      ),
-      ElevatedButton(
         onPressed: widget.onChangeColor,
         style: ElevatedButton.styleFrom(
           backgroundColor: widget.newColor,
@@ -109,7 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         actions: [
           IconButton(
-            
             icon: const Icon(Icons.message, color: Colors.yellow, size: 50),
             onPressed: _goToAbout,
           ),
@@ -124,21 +181,6 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row( /*
-                      children: [
-                        Image.asset('assets/Pixel-Art-Hot-Pepper-2-1.webp',
-                            width: 200, height: 200, fit: BoxFit.cover),
-                        const SizedBox(width: 12),
-                        Image.asset('assets/Pixel-Art-Pizza-2.webp',
-                            width: 200, height: 200, fit: BoxFit.cover),
-                        const SizedBox(width: 12),
-                        Image.asset('assets/Pixel-Art-Watermelon-3.webp',
-                            width: 200, height: 200, fit: BoxFit.cover),
-                      ],*/
-                    ),
-                  ),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -149,9 +191,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         label: const Text("Crear"),
                       ),
                       ElevatedButton.icon(
-                        onPressed: null,
-                        icon: const Icon(Icons.share),
-                        label: const Text("Compartir"),
+                        onPressed: _openLatestCreation, 
+                        icon: const Icon(Icons.history),
+                        label: const Text("Última creación"),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: _goToArt,
+                        icon: const Icon(Icons.list),
+                        label: const Text("Lista de creaciones"),
                       ),
                     ],
                   ),

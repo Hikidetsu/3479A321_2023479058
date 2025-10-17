@@ -1,42 +1,30 @@
-import 'package:flutter/material.dart';
 
-//el objetivo de esta pantalla es guardar las listas que vamos a mostrar en la pantalla de creacion
-//lista con los elementos que queremos mostrar
-final List<String> elementos = [
-    "Creacion 1",
-    "Creacion 2",
-    "Creacion 3",
-  ];
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
-//lista con las imagenes que queremos mostrar
-final List<String> imagenes = [
-    "assets/Pixel-Art-Hot-Pepper-2-1.webp",
-    "assets/Pixel-Art-Pizza-2.webp",
-    "assets/Pixel-Art-Watermelon-3.webp",
-  ];
+class ListArt {
+  List<String> elementos = [];
+  List<File> imagenes = [];
 
+  Future<void> loadCreations() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final items = directory.listSync();
 
+      final pixelArtFiles = items
+          .where((item) => item.path.endsWith('.png') && item.path.contains('pixel_art_'))
+          .map((item) => File(item.path))
+          .toList();
 
-class ListArtScreen extends StatelessWidget {
+      elementos.clear();
+      imagenes.clear();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Pixel Art List'),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              'Lista de pixel art disponibles',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
-    );
+      for (var file in pixelArtFiles) {
+        elementos.add(file.path.split('/').last);
+        imagenes.add(file);
+      }
+    } catch (e) {
+      print("Error al cargar las creaciones: $e");
+    }
   }
 }
